@@ -9,7 +9,7 @@ export const Users = async (req:Request,res:Response)=>{
 
     const data = appDataSource.getRepository(User)
 
-    const users = await data.find()
+    const users = await data.find({relations:['role']})
 
     res.send(users.map(user =>{
         const {password, ...data} = user
@@ -30,7 +30,10 @@ export const createUsers = async (req:Request,res:Response)=>{
 
     const {password, ...user} = await data.save({
         ...body,
-        password:hashedPassword
+        password:hashedPassword,
+        role: {
+            id: role_id
+        }
     })
 
 
@@ -44,7 +47,7 @@ export const getUser = async (req:Request,res:Response)=>{
     const userData = appDataSource.getRepository(User)
 
     const id: number = parseInt(req.params.id, 10);
-    const {password, ...data} = await userData.findOne({where:{id:id}});
+    const {password, ...data} = await userData.findOne({where:{id:id}, relations:['role']});
 
     res.send(data)
 
@@ -57,9 +60,12 @@ export const updateUser = async (req:Request,res:Response)=>{
     const userData = appDataSource.getRepository(User)
 
     const id: number = parseInt(req.params.id, 10);
-     await userData.update(id, body);
+     await userData.update(id, {
+        ...body,
+        id: role_id
+     });
 
-     const {password, ...data} = await userData.findOne({where:{id:id}});
+     const {password, ...data} = await userData.findOne({where:{id:id}, relations:['role']});
 
     res.status(202).send(data)
 

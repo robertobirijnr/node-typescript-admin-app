@@ -1,3 +1,5 @@
+import { Permissions } from '../controller/permissionController';
+import { Roles, createRole } from '../controller/roleController';
 import { Users, createUsers, deleteUser, getUser, updateUser } from '../controller/userController';
 import { AuthMiddleware } from '../mddleware/authMiddleware';
 import { AuthUser, Login,Register, logout, updatePassword, updateProfile } from './../controller/authContoller';
@@ -19,4 +21,9 @@ export const routes = (router:Router)=>{
         .get('/api/users/:id',AuthMiddleware, getUser)
         .put('/api/users/:id',AuthMiddleware, updateUser)
         .delete('/api/users/:id',AuthMiddleware, deleteUser)
+
+        .get('/api/permissions',AuthMiddleware, Permissions)
+        .get('/api/roles',AuthMiddleware,Roles )
+        .post('/api/roles',AuthMiddleware,createRole )
+
 }
