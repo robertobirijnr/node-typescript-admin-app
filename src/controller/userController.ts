@@ -7,15 +7,33 @@ import { Request, Response } from "express";
 
 export const Users = async (req:Request,res:Response)=>{
 
+    const take = 15;
+
+    const page = parseInt(req.query.page as string|| '1')
+
     const data = appDataSource.getRepository(User)
 
-    const users = await data.find({relations:['role']})
+    const [users, total] = await data.findAndCount({
+        take,
+        skip:(page - 1) * take,
+        relations:['role']
+    })
 
-    res.send(users.map(user =>{
+    //we want to remove the password
+    users.map(user =>{
         const {password, ...data} = user
 
         return data
-    }))
+    })
+
+    res.send({
+        data:users,
+        meta:{
+            total,
+            page,
+            last_page: Math.ceil(total/take)
+        }
+    })
 
 }
 

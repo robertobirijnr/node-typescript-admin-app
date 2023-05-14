@@ -4,14 +4,30 @@ import { Request, Response } from "express";
 
 
 export const getAllProducts = async(req:Request,res:Response)=>{
-    const productData = appDataSource.getRepository(Product);
-   const products = await productData.find()
+    const paginateNum = 15;
 
-   res.send(products);
+    const page = parseInt(req.query.page as string || '1')
+
+    const productData = appDataSource.getRepository(Product);
+   const [products,total] = await productData.findAndCount({
+    take:paginateNum,
+    skip:(page - 1) * paginateNum
+   })
+
+   res.send({
+    data:products,
+    meta:{
+        total,
+        page,
+        last_page:Math.ceil(total/paginateNum)
+    }
+   });
 }
 
 
 export const createProduct = async (req:Request,res:Response) =>{
+
+    
 
    const productData = appDataSource.getRepository(Product);
 
