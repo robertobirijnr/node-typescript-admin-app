@@ -1,4 +1,5 @@
 import { UploadImage } from '../controller/imageController';
+import { Export, getOrders } from '../controller/orderController';
 import { Permissions } from '../controller/permissionController';
 import { createProduct, deleteProduct, getAllProducts, getSingleProduct, updateProduct } from '../controller/productController';
 import { Roles, createRole, deleteRole, getRole, updateRole } from '../controller/roleController';
@@ -41,6 +42,9 @@ export const routes = (router:Router)=>{
         .delete('/api/products/:id',AuthMiddleware,deleteProduct )
         .post('/api/upload',AuthMiddleware,UploadImage )
         .use('/api/uploads',express.static('./uploads') )
+
+        .get('/api/orders',AuthMiddleware,getOrders )
+        .post('/api/export',AuthMiddleware,Export )
 
        
 
