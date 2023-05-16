@@ -16,7 +16,7 @@ export const AuthMiddleware = async(req:Request,res:Response,next:Function)=>{
     
         const userData = appDataSource.getRepository(User);
     
-         req["user"] = await userData.findOne({where:{id: payload.id}})
+         req["user"] = await userData.findOne({where:{id: payload.id},relations:['role','role.permissions']})
 
        
     

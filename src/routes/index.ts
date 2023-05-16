@@ -5,6 +5,7 @@ import { createProduct, deleteProduct, getAllProducts, getSingleProduct, updateP
 import { Roles, createRole, deleteRole, getRole, updateRole } from '../controller/roleController';
 import { Users, createUsers, deleteUser, getUser, updateUser } from '../controller/userController';
 import { AuthMiddleware } from '../mddleware/authMiddleware';
+import { PermissionMiddleware } from '../mddleware/permssionMiddleware';
 import { AuthUser, Login,Register, logout, updatePassword, updateProfile } from './../controller/authContoller';
 import {  Router} from "express";
 import  express  from "express";
@@ -21,11 +22,11 @@ export const routes = (router:Router)=>{
         .put('/api/user/change-password',AuthMiddleware, updatePassword)
 
         
-        .get('/api/users',AuthMiddleware, Users)
-        .post('/api/user/create',AuthMiddleware, createUsers)
-        .get('/api/users/:id',AuthMiddleware, getUser)
-        .put('/api/users/:id',AuthMiddleware, updateUser)
-        .delete('/api/users/:id',AuthMiddleware, deleteUser)
+        .get('/api/users',AuthMiddleware,PermissionMiddleware('users'), Users)
+        .post('/api/user/create',AuthMiddleware,PermissionMiddleware('users'), createUsers)
+        .get('/api/users/:id',AuthMiddleware,PermissionMiddleware('users'), getUser)
+        .put('/api/users/:id',AuthMiddleware,PermissionMiddleware('users'), updateUser)
+        .delete('/api/users/:id',AuthMiddleware,PermissionMiddleware('users'), deleteUser)
 
         .get('/api/permissions',AuthMiddleware, Permissions)
 
@@ -35,11 +36,12 @@ export const routes = (router:Router)=>{
         .put('/api/roles/:id', AuthMiddleware,updateRole)
         .delete('/api/roles/:id', AuthMiddleware,deleteRole)
 
-        .get('/api/products',AuthMiddleware,getAllProducts )
-        .post('/api/products',AuthMiddleware,createProduct )
-        .get('/api/products/:id',AuthMiddleware,getSingleProduct )
-        .put('/api/products/:id',AuthMiddleware,updateProduct )
-        .delete('/api/products/:id',AuthMiddleware,deleteProduct )
+        .get('/api/products',AuthMiddleware,PermissionMiddleware('products'),getAllProducts )
+        .post('/api/products',AuthMiddleware,PermissionMiddleware('products'),createProduct )
+        .get('/api/products/:id',AuthMiddleware,PermissionMiddleware('products'),getSingleProduct )
+        .put('/api/products/:id',AuthMiddleware,PermissionMiddleware('products'),updateProduct )
+        .delete('/api/products/:id',AuthMiddleware,PermissionMiddleware('products'),deleteProduct )
+        
         .post('/api/upload',AuthMiddleware,UploadImage )
         .use('/api/uploads',express.static('./uploads') )
 
