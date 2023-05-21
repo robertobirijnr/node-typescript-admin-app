@@ -77,13 +77,13 @@ export const updateUser = async (req:Request,res:Response)=>{
 
     const userData = appDataSource.getRepository(User)
 
-    const id: number = parseInt(req.params.id, 10);
-     await userData.update(id, {
+   
+     await userData.update(parseInt(req.params.id), {
         ...body,
-        id: role_id
+        role: role_id
      });
 
-     const {password, ...data} = await userData.findOne({where:{id:id}, relations:['role']});
+     const {password, ...data }= await userData.findOne({where:{id:parseInt(req.params.id)}, relations:['role']});
 
     res.status(202).send(data)
 
@@ -93,8 +93,8 @@ export const deleteUser = async (req:Request,res:Response)=>{
 
     const userData = appDataSource.getRepository(User)
 
-    const id: number = parseInt(req.params.id, 10);
-     await userData.delete(id);
+   
+     await userData.delete(parseInt(req.params.id));
 
      res.status(204).send(null)
 

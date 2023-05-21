@@ -22,11 +22,11 @@ export const routes = (router:Router)=>{
         .put('/api/user/change-password',AuthMiddleware, updatePassword)
 
         
-        .get('/api/users',AuthMiddleware,PermissionMiddleware('users'), Users)
-        .post('/api/user/create',AuthMiddleware,PermissionMiddleware('users'), createUsers)
-        .get('/api/users/:id',AuthMiddleware,PermissionMiddleware('users'), getUser)
-        .put('/api/users/:id',AuthMiddleware,PermissionMiddleware('users'), updateUser)
-        .delete('/api/users/:id',AuthMiddleware,PermissionMiddleware('users'), deleteUser)
+        .get('/api/users',AuthMiddleware, Users)
+        .post('/api/user/create',AuthMiddleware, createUsers)
+        .get('/api/users/:id',AuthMiddleware, getUser)
+        .put('/api/users/:id',AuthMiddleware, updateUser)
+        .delete('/api/users/:id',AuthMiddleware, deleteUser)
 
         .get('/api/permissions',AuthMiddleware, Permissions)
 
@@ -36,11 +36,13 @@ export const routes = (router:Router)=>{
         .put('/api/roles/:id', AuthMiddleware,updateRole)
         .delete('/api/roles/:id', AuthMiddleware,deleteRole)
 
-        .get('/api/products',AuthMiddleware,PermissionMiddleware('products'),getAllProducts )
-        .post('/api/products',AuthMiddleware,PermissionMiddleware('products'),createProduct )
-        .get('/api/products/:id',AuthMiddleware,PermissionMiddleware('products'),getSingleProduct )
-        .put('/api/products/:id',AuthMiddleware,PermissionMiddleware('products'),updateProduct )
-        .delete('/api/products/:id',AuthMiddleware,PermissionMiddleware('products'),deleteProduct )
+        // PermissionMiddleware('products')
+
+        .get('/api/products',AuthMiddleware,getAllProducts )
+        .post('/api/products',AuthMiddleware,createProduct )
+        .get('/api/products/:id',AuthMiddleware,getSingleProduct )
+        .put('/api/products/:id',AuthMiddleware,updateProduct )
+        .delete('/api/products/:id',AuthMiddleware,deleteProduct )
         
         .post('/api/upload',AuthMiddleware,UploadImage )
         .use('/api/uploads',express.static('./uploads') )

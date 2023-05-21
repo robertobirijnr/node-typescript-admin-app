@@ -39,7 +39,7 @@ export const Login = async(req:Request,res:Response)=>{
     const user = await userData.findOne({where:{email: req.body.email}})
     if(!user){
         res.status(404).json({
-            message:"nvalid Credentials",
+            message:"invalid Credentials",
             
         })
     }
